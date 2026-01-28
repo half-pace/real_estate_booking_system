@@ -12,11 +12,16 @@ class User:
         
     
     
-class Customer:
-    pass
+class Customer(User):
+    def __init__(self, user_id, name, email, phone, role, booking_history, saved_properties):
+        super().__init__(user_id, name, email, phone, role)
+        self.booking_history = booking_history
+        self.saved_properties = saved_properties
 
-class Owner:
-    pass
+class propertyOwner(User):
+    def __init__(self, user_id, name, email, phone, role, owned_properties):
+        super().__init__(user_id, name, email, phone, role)
+        self.owned_properties = owned_properties
 
-class Admin:
+class Admin(User):
     pass

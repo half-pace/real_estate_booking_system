@@ -1,26 +1,24 @@
 
 
 class Property:
-    def __init__(self, property_id, title, description, location, price, property_type, owner_id, amenities, availability_status):
+    def __init__(self, property_id, title, location, price_per_day, owner_id, is_available):
         self.id = property_id
         self.title = title
-        self.description = description
+        #self.description = description
         self.location = location
-        self.price = price
-        self.property_type = property_type
+        self.price_per_day = price_per_day
+        #self.property_type = property_type
         self.owner_id = owner_id
-        self.amenities = amenities
-        self.availability_status = availability_status
+        #self.amenities = amenities
+        self.is_available = True
         
     #methods
-    def update_details(self):
-        pass
-    
     def mark_available(self):
-        pass
+        self.is_available = True
     
     def mark_unavailable(self):
-        pass
+        self.is_available = False
     
     def __str__(self):
-        return f"Property(Property_ID: {self.property_id}, Title: {self.title}, Description: {self.description}, Location: {self.location}, Price: {self.price}, Property_type: {self.property_type}, Owner_ID: {self.owner_id}, Amenities: {self.amenities}, and Availablitily_Status: {self.availability_status})"
+        status = "Available" if self.is_available else "Booked"
+        return f"Property(Property_ID: {self.property_id}, Title: {self.title}, Location: {self.location}, Price: {self.price_per_day}, Owner_ID: {self.owner_id}, and Availablitily_Status: {status})"

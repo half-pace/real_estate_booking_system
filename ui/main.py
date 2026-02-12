@@ -1,13 +1,13 @@
 from models import User
-from repositories import UserRepository, PropertyRepository, BookingRepository
+from repositories import UserRepo, PropertyRepo, BookingRepo
 from services  import UserService, PropertyService, BookingService
 
 class RealEstateCLI:
     def __init__(self):
         #initializing repositories
-        self.user_repo = UserRepository()
-        self.property_repo = PropertyRepository()
-        self.booking_repo = BookingRepository()
+        self.user_repo = UserRepo()
+        self.property_repo = PropertyRepo()
+        self.booking_repo = BookingRepo()
         
         #initializing services
         self.user_service = UserService(self.user_repo)

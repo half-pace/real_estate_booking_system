@@ -42,7 +42,8 @@ class BookingService:
         self.booking_repo.add(booking)
         
         #to mark property unavailable 
-        property_obj.mark_unavailable()
+        #property_obj.mark_unavailable()
+        self.property_repo.update_availability(property_id, False)
         
         return booking
     
@@ -59,6 +60,7 @@ class BookingService:
             return False
         
         property_obj = self.property_repo.get_by_id(booking.property_id)
-        property_obj.mark_available()
+        #property_obj.mark_available()
+        self.property_repo.update_availability(booking.property_id, True)
         
         return self.booking_repo.delete(booking_id) 

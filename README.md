@@ -55,14 +55,6 @@ real_estate_booking_system/
 - Reports & Analytics
 - Dual Interface (CLI & GUI)
 
-## Documentation
 
-Documentation for teacher submission is in `documentation/` folder.
-```
-
----
-
-### **requirements.txt**
-```
 pymongo==4.6.1
 PyQt5==5.15.10

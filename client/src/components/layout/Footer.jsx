@@ -16,11 +16,11 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-6">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-accent-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-heading text-lg font-bold">R</span>
+              <div className="w-10 h-10 flex items-center justify-center">
+                <img src="/cit-logo (3).png" alt="CIT-ES" className="w-full h-full object-contain" />
               </div>
               <span className="text-2xl font-heading font-bold">
-                Real<span className="text-accent-500">ES</span>
+                CIT-<span className="text-accent-500">ES</span>
               </span>
             </Link>
             <p className="text-neutral-400 text-sm leading-relaxed">
@@ -45,7 +45,7 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wider text-accent-500 mb-6">Quick Links</h4>
             <ul className="space-y-3">
-              {['Home', 'Properties', 'About Us', 'Contact', 'Blog'].map((item) => (
+              {['Home', 'Properties', 'About', 'Contact'].map((item) => (
                 <li key={item}>
                   <Link
                     to={item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`}
@@ -93,8 +93,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-accent-500 flex-shrink-0" />
-                <a href="mailto:hello@reales.com" className="text-neutral-400 hover:text-white transition-colors text-sm">
-                  hello@reales.com
+                <a href="mailto:hello@cit-es.com" className="text-neutral-400 hover:text-white transition-colors text-sm">
+                  hello@cit-es.com
                 </a>
               </li>
             </ul>
@@ -104,7 +104,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-neutral-500 text-sm">
-            © {new Date().getFullYear()} RealES. All rights reserved.
+            © {new Date().getFullYear()} CIT-ES. All rights reserved.
           </p>
           <div className="flex gap-6">
             {['Privacy Policy', 'Terms of Service', 'Cookie Settings'].map((item) => (

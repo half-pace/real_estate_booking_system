@@ -24,7 +24,7 @@ A stunning, production-ready real estate booking platform built with the MERN st
 | Animations | GSAP + ScrollTrigger |
 | State | Zustand |
 | Backend | Node.js + Express.js |
-| Database | MongoDB Atlas |
+| Database | MySQL + Sequelize |
 | Auth | JWT (JSON Web Tokens) |
 
 ## 🚀 Getting Started
@@ -48,19 +48,7 @@ npm install
 
 ### 2. Configure Environment
 
-**Server** (`server/.env`):
-```
-MONGODB_URI=mongodb+srv://your_username:your_password@cluster.mongodb.net/real-estate
-JWT_SECRET=your_secret_key_here
-JWT_EXPIRE=7d
-PORT=5000
-NODE_ENV=development
-```
-
-**Client** (`client/.env`):
-```
-VITE_API_URL=http://localhost:5000/api
-```
+Ensure your `.env` files are configured for the server and client. Refer to `.env.example` if available.
 
 ### 3. Seed Database
 
@@ -70,9 +58,9 @@ npm run seed
 ```
 
 This creates sample properties and test accounts:
-- **Agent:** agent@reales.com / password123
-- **User:** user@reales.com / password123
-- **Admin:** admin@reales.com / password123
+- **Agent:** agent@reales.com
+- **User:** user@reales.com
+- **Admin:** admin@reales.com
 
 ### 4. Run Development Servers
 

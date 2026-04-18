@@ -87,7 +87,7 @@ export default function Register() {
             </span>
           </Link>
           <h2 className="text-4xl font-heading font-bold text-white mb-4">
-            Join RealES
+            Join CIT-ES
           </h2>
           <p className="text-white/70 text-lg max-w-md">
             Create an account and start exploring the finest properties available.

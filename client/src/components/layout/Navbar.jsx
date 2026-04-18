@@ -69,22 +69,22 @@ export default function Navbar() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
         isScrolled || !isHomePage
-          ? 'bg-white/95 backdrop-blur-lg shadow-sm border-b border-neutral-200/50'
+          ? 'bg-white dark:bg-neutral-900/95 dark:bg-neutral-900/95 backdrop-blur-lg shadow-sm border-b border-neutral-200/50 dark:border-neutral-800/50'
           : 'bg-transparent'
       )}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group" aria-label="RealES Home">
-            <div className="w-10 h-10 bg-accent-500 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-              <span className="text-white font-heading text-lg font-bold">R</span>
+          <Link to="/" className="flex items-center gap-2 group" aria-label="CIT-ES Home">
+            <div className="w-10 h-10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+              <img src="/cit-logo (3).png" alt="CIT-ES" className="w-full h-full object-contain" />
             </div>
             <span className={cn(
               'text-2xl font-heading font-bold transition-colors duration-300',
-              isScrolled || !isHomePage ? 'text-primary-900' : 'text-white'
+              isScrolled || !isHomePage ? 'text-primary-900 dark:text-white' : 'text-white'
             )}>
-              Real<span className="text-accent-500">ES</span>
+              CIT-<span className="text-accent-500">ES</span>
             </span>
           </Link>
 
@@ -99,7 +99,7 @@ export default function Navbar() {
                   location.pathname === link.path
                     ? 'text-accent-500'
                     : isScrolled || !isHomePage
-                      ? 'text-primary-800 hover:text-accent-500'
+                      ? 'text-primary-800 dark:text-neutral-200 hover:text-accent-500'
                       : 'text-white/90 hover:text-white'
                 )}
               >
@@ -114,18 +114,7 @@ export default function Navbar() {
 
           {/* Right Side */}
           <div className="hidden md:flex items-center gap-4">
-            <button
-              onClick={toggleTheme}
-              className={cn(
-                'w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300',
-                isScrolled || !isHomePage
-                  ? 'text-primary-800 hover:bg-neutral-100'
-                  : 'text-white hover:bg-white/10'
-              )}
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
+
             {isAuthenticated ? (
               <div className="relative">
                 <button
@@ -133,8 +122,8 @@ export default function Navbar() {
                   className={cn(
                     'flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300',
                     isScrolled || !isHomePage
-                      ? 'hover:bg-neutral-100 text-primary-800'
-                      : 'hover:bg-white/10 text-white'
+                      ? 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-primary-800 dark:text-neutral-200'
+                      : 'hover:bg-white dark:bg-neutral-900/10 text-white'
                   )}
                 >
                   <div className="w-8 h-8 rounded-full bg-accent-500 flex items-center justify-center">
@@ -147,21 +136,21 @@ export default function Navbar() {
                 </button>
 
                 {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-neutral-200 py-2 animate-scale-in">
+                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-neutral-900 rounded-xl shadow-xl border border-neutral-200 py-2 animate-scale-in">
                     <div className="px-4 py-3 border-b border-neutral-100">
-                      <p className="text-sm font-medium text-primary-900">{user?.name}</p>
+                      <p className="text-sm font-medium text-primary-900 dark:text-white">{user?.name}</p>
                       <p className="text-xs text-neutral-500">{user?.email}</p>
                     </div>
-                    <Link to="/dashboard" className="flex items-center gap-3 px-4 py-2.5 text-sm text-primary-800 hover:bg-neutral-50 transition-colors">
+                    <Link to="/dashboard" className="flex items-center gap-3 px-4 py-2.5 text-sm text-primary-800 dark:text-neutral-200 hover:bg-neutral-50 transition-colors">
                       <LayoutDashboard className="w-4 h-4" /> Dashboard
                     </Link>
-                    <Link to="/dashboard/bookings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-primary-800 hover:bg-neutral-50 transition-colors">
+                    <Link to="/dashboard/bookings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-primary-800 dark:text-neutral-200 hover:bg-neutral-50 transition-colors">
                       <Calendar className="w-4 h-4" /> My Bookings
                     </Link>
-                    <Link to="/dashboard/favorites" className="flex items-center gap-3 px-4 py-2.5 text-sm text-primary-800 hover:bg-neutral-50 transition-colors">
+                    <Link to="/dashboard/favorites" className="flex items-center gap-3 px-4 py-2.5 text-sm text-primary-800 dark:text-neutral-200 hover:bg-neutral-50 transition-colors">
                       <Heart className="w-4 h-4" /> Favorites
                     </Link>
-                    <Link to="/dashboard/profile" className="flex items-center gap-3 px-4 py-2.5 text-sm text-primary-800 hover:bg-neutral-50 transition-colors">
+                    <Link to="/dashboard/profile" className="flex items-center gap-3 px-4 py-2.5 text-sm text-primary-800 dark:text-neutral-200 hover:bg-neutral-50 transition-colors">
                       <User className="w-4 h-4" /> Profile
                     </Link>
                     <div className="border-t border-neutral-100 mt-1 pt-1">
@@ -191,25 +180,16 @@ export default function Navbar() {
 
           {/* Mobile Menu Button & Theme Toggle */}
           <div className="flex items-center gap-2 md:hidden">
-            <button
-              onClick={toggleTheme}
-              className={cn(
-                'w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300',
-                isScrolled || !isHomePage ? 'text-primary-900' : 'text-white'
-              )}
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
+
             <button
               className="p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
-                <X className={cn('w-6 h-6', isScrolled || !isHomePage ? 'text-primary-900' : 'text-white')} />
+                <X className={cn('w-6 h-6', isScrolled || !isHomePage ? 'text-primary-900 dark:text-white' : 'text-white')} />
               ) : (
-                <Menu className={cn('w-6 h-6', isScrolled || !isHomePage ? 'text-primary-900' : 'text-white')} />
+                <Menu className={cn('w-6 h-6', isScrolled || !isHomePage ? 'text-primary-900 dark:text-white' : 'text-white')} />
               )}
             </button>
           </div>
@@ -218,7 +198,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div ref={mobileMenuRef} className="md:hidden bg-white border-t border-neutral-200 shadow-lg">
+        <div ref={mobileMenuRef} className="md:hidden bg-white dark:bg-neutral-900 border-t border-neutral-200 shadow-lg">
           <div className="px-4 py-6 space-y-4">
             {navLinks.map((link) => (
               <Link
@@ -226,7 +206,7 @@ export default function Navbar() {
                 to={link.path}
                 className={cn(
                   'block text-lg font-medium py-2 transition-colors',
-                  location.pathname === link.path ? 'text-accent-500' : 'text-primary-800'
+                  location.pathname === link.path ? 'text-accent-500' : 'text-primary-800 dark:text-neutral-200'
                 )}
               >
                 {link.label}

@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   Search, ArrowRight, MapPin, Home, Building2, Castle,
   Star, Shield, Clock, ChevronLeft, ChevronRight,
-  Users, Award, TrendingUp, Sparkles, ArrowDown
+  Users, Award, TrendingUp, Sparkles, ArrowDown, User
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import PropertyCard from '@/components/property/PropertyCard';
@@ -36,24 +36,24 @@ const PROPERTY_TYPES = [
 
 const TESTIMONIALS = [
   {
-    name: 'Emily Richardson',
+    name: 'David',
     role: 'Homeowner',
-    text: 'RealES made finding our dream home an absolute pleasure. The attention to detail and personalized service exceeded all expectations.',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face',
+    text: 'CIT-ES made finding our dream home an absolute pleasure. The attention to detail and personalized service exceeded all expectations.',
+    avatar: '',
     rating: 5,
   },
   {
-    name: 'Michael Chen',
+    name: 'Hatorki',
     role: 'Investor',
-    text: 'As a real estate investor, I need a platform I can trust. RealES provides unmatched market insights and premium property listings.',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
+    text: 'As a real estate investor, I need a platform I can trust. CIT-ES provides unmatched market insights and premium property listings.',
+    avatar: '',
     rating: 5,
   },
   {
-    name: 'Sarah Johnson',
+    name: 'Dharam',
     role: 'First-time Buyer',
     text: 'The entire experience from search to booking was seamless. The virtual tours saved us so much time. Highly recommend!',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face',
+    avatar: '',
     rating: 5,
   },
 ];
@@ -82,7 +82,41 @@ export default function HomePage() {
         setFeaturedProperties(data.properties);
       } catch (err) {
         // Use placeholder data if API fails
-        setFeaturedProperties([]);
+        setFeaturedProperties([
+          {
+            _id: 'dummy1',
+            title: 'Modern Glass Villa',
+            type: 'villa',
+            price: 1500,
+            rating: 4.9,
+            views: 342,
+            location: { city: 'Beverly Hills', state: 'CA' },
+            features: { bedrooms: 4, bathrooms: 5, area: 4500 },
+            mainImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80'
+          },
+          {
+            _id: 'dummy2',
+            title: 'Luxury Penthouse Suite',
+            type: 'penthouse',
+            price: 850,
+            rating: 4.8,
+            views: 892,
+            location: { city: 'New York', state: 'NY' },
+            features: { bedrooms: 3, bathrooms: 3, area: 2800 },
+            mainImage: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80'
+          },
+          {
+            _id: 'dummy3',
+            title: 'Oceanfront Mansion',
+            type: 'house',
+            price: 2200,
+            rating: 5.0,
+            views: 1205,
+            location: { city: 'Malibu', state: 'CA' },
+            features: { bedrooms: 6, bathrooms: 7, area: 8200 },
+            mainImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80'
+          }
+        ]);
       }
     };
     fetchFeatured();
@@ -246,7 +280,7 @@ export default function HomePage() {
 
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="hero-search max-w-2xl mx-auto mb-8 opacity-0">
-            <div className="flex items-center bg-white/95 backdrop-blur-lg rounded-2xl p-2 shadow-2xl">
+            <div className="flex items-center bg-white dark:bg-neutral-900/95 backdrop-blur-lg rounded-2xl p-2 shadow-2xl">
               <div className="flex-1 flex items-center gap-3 px-4">
                 <Search className="w-5 h-5 text-neutral-400 flex-shrink-0" />
                 <input
@@ -254,7 +288,7 @@ export default function HomePage() {
                   placeholder="Search by location, property name, or type..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full py-3 text-primary-900 placeholder:text-neutral-400 bg-transparent outline-none text-sm md:text-base"
+                  className="w-full py-3 text-primary-900 dark:text-white placeholder:text-neutral-400 bg-transparent outline-none text-sm md:text-base"
                 />
               </div>
               <Button type="submit" size="lg" className="rounded-xl hidden sm:flex">
@@ -282,7 +316,7 @@ export default function HomePage() {
         <div className="hero-scroll absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0">
           <span className="text-white/60 text-xs tracking-widest uppercase">Scroll to Explore</span>
           <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center pt-2">
-            <div className="w-1.5 h-3 bg-white/60 rounded-full animate-bounce" />
+            <div className="w-1.5 h-3 bg-white dark:bg-neutral-900/60 rounded-full animate-bounce" />
           </div>
         </div>
 
@@ -293,7 +327,7 @@ export default function HomePage() {
               key={i}
               onClick={() => setCurrentHeroImage(i)}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                currentHeroImage === i ? 'bg-accent-500 w-8' : 'bg-white/40 hover:bg-white/60'
+                currentHeroImage === i ? 'bg-accent-500 w-8' : 'bg-white dark:bg-neutral-900/40 hover:bg-white dark:bg-neutral-900/60'
               }`}
               aria-label={`Go to slide ${i + 1}`}
             />
@@ -302,7 +336,7 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section ref={statsRef} className="py-16 bg-white border-b border-neutral-100">
+      <section ref={statsRef} className="py-16 bg-white dark:bg-neutral-900 border-b border-neutral-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {STATS.map((stat, i) => (
@@ -310,7 +344,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-center gap-1">
                   <span
                     ref={(el) => (statNumbers.current[i] = el)}
-                    className="text-4xl md:text-5xl font-heading font-bold text-primary-900"
+                    className="text-4xl md:text-5xl font-heading font-bold text-primary-900 dark:text-white"
                   >
                     0
                   </span>
@@ -324,11 +358,11 @@ export default function HomePage() {
       </section>
 
       {/* Featured Properties */}
-      <section ref={featuredRef} className="py-20 md:py-28 bg-neutral-50">
+      <section ref={featuredRef} className="py-20 md:py-28 bg-neutral-50 dark:bg-neutral-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="section-header text-center mb-14">
             <p className="text-accent-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">Handpicked for You</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-900 mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-900 dark:text-white mb-4">
               Featured Properties
             </h2>
             <p className="text-neutral-500 max-w-2xl mx-auto">
@@ -347,7 +381,7 @@ export default function HomePage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="featured-card bg-white rounded-2xl overflow-hidden shadow-sm border border-neutral-100">
+                <div key={i} className="featured-card bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-sm border border-neutral-100">
                   <div className="aspect-[4/3] skeleton" />
                   <div className="p-5 space-y-3">
                     <div className="h-5 skeleton rounded w-3/4" />
@@ -371,11 +405,11 @@ export default function HomePage() {
       </section>
 
       {/* Property Types */}
-      <section ref={typesRef} className="py-20 md:py-28 bg-white">
+      <section ref={typesRef} className="py-20 md:py-28 bg-white dark:bg-neutral-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="section-header text-center mb-14">
             <p className="text-accent-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">Browse By Category</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-900 mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-900 dark:text-white mb-4">
               Explore Property Types
             </h2>
           </div>
@@ -385,12 +419,12 @@ export default function HomePage() {
               <Link
                 key={type}
                 to={`/properties?type=${type}`}
-                className="type-card group p-8 rounded-2xl border-2 border-neutral-200 hover:border-accent-500 transition-all duration-500 text-center hover:shadow-xl bg-white"
+                className="type-card group p-8 rounded-2xl border-2 border-neutral-200 hover:border-accent-500 transition-all duration-500 text-center hover:shadow-xl bg-white dark:bg-neutral-900"
               >
                 <div className="w-20 h-20 rounded-2xl bg-accent-500/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-accent-500 transition-colors duration-500">
                   <Icon className="w-10 h-10 text-accent-500 group-hover:text-white transition-colors duration-500" />
                 </div>
-                <h3 className="text-xl font-heading font-semibold text-primary-900 mb-2">{label}</h3>
+                <h3 className="text-xl font-heading font-semibold text-primary-900 dark:text-white mb-2">{label}</h3>
                 <p className="text-neutral-500 text-sm">{count} Properties</p>
               </Link>
             ))}
@@ -452,11 +486,11 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section ref={testimonialsRef} className="py-20 md:py-28 bg-neutral-50">
+      <section ref={testimonialsRef} className="py-20 md:py-28 bg-neutral-50 dark:bg-neutral-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="section-header text-center mb-14">
             <p className="text-accent-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">Testimonials</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-900 mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-900 dark:text-white mb-4">
               What Our Clients Say
             </h2>
           </div>
@@ -478,15 +512,21 @@ export default function HomePage() {
                       <Star key={j} className="w-5 h-5 text-accent-500 fill-accent-500" />
                     ))}
                   </div>
-                  <p className="text-lg md:text-xl text-primary-800 leading-relaxed mb-8 italic">
+                  <p className="text-lg md:text-xl text-primary-800 dark:text-neutral-200 leading-relaxed mb-8 italic">
                     "{testimonial.text}"
                   </p>
-                  <img
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
-                    className="w-14 h-14 rounded-full object-cover mb-3 ring-2 ring-accent-500/20"
-                  />
-                  <p className="font-heading font-semibold text-primary-900">{testimonial.name}</p>
+                  {testimonial.avatar ? (
+                    <img
+                      src={testimonial.avatar}
+                      alt={testimonial.name}
+                      className="w-14 h-14 rounded-full object-cover mb-3 ring-2 ring-accent-500/20"
+                    />
+                  ) : (
+                    <div className="w-14 h-14 rounded-full bg-neutral-200 mb-3 ring-2 ring-accent-500/20 flex items-center justify-center">
+                      <User className="w-7 h-7 text-neutral-400" />
+                    </div>
+                  )}
+                  <p className="font-heading font-semibold text-primary-900 dark:text-white">{testimonial.name}</p>
                   <p className="text-neutral-500 text-sm">{testimonial.role}</p>
                 </div>
               ))}
@@ -510,11 +550,11 @@ export default function HomePage() {
       </section>
 
       {/* Newsletter / CTA Section */}
-      <section ref={ctaRef} className="py-20 md:py-28 bg-white">
+      <section ref={ctaRef} className="py-20 md:py-28 bg-white dark:bg-neutral-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="section-header">
             <p className="text-accent-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">Stay Updated</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-900 mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-900 dark:text-white mb-4">
               Never Miss a Premium Listing
             </h2>
             <p className="text-neutral-500 mb-10 max-w-xl mx-auto">
@@ -526,7 +566,7 @@ export default function HomePage() {
             <input
               type="email"
               placeholder="Enter your email address"
-              className="flex-1 h-13 px-5 rounded-xl border border-neutral-300 bg-white text-primary-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent-500/30 focus:border-accent-500 transition-all"
+              className="flex-1 h-13 px-5 rounded-xl border border-neutral-300 bg-white dark:bg-neutral-900 text-primary-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent-500/30 focus:border-accent-500 transition-all"
             />
             <Button size="lg" className="rounded-xl whitespace-nowrap">
               Subscribe

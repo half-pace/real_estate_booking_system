@@ -126,10 +126,8 @@ export default function Navbar() {
                       : 'hover:bg-white dark:bg-neutral-900/10 text-white'
                   )}
                 >
-                  <div className="w-8 h-8 rounded-full bg-accent-500 flex items-center justify-center">
-                    <span className="text-white text-sm font-bold">
-                      {user?.name?.[0]?.toUpperCase() || 'U'}
-                    </span>
+                  <div className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center">
+                    <User className="w-5 h-5 text-neutral-400" />
                   </div>
                   <span className="text-sm font-medium">{user?.name?.split(' ')[0]}</span>
                   <ChevronDown className="w-4 h-4" />

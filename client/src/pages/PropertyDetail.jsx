@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import {
   MapPin, Bed, Bath, Maximize, Car, Star, Heart, Share2, Eye,
-  ChevronLeft, ChevronRight, X, Calendar, Users, Phone, Mail,
+  ChevronLeft, ChevronRight, X, Calendar, Users, Phone, Mail, User,
   Wifi, Dumbbell, Waves, TreePine, Shield, Home, Check, ArrowLeft
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -316,10 +316,8 @@ export default function PropertyDetail() {
                         {reviews.map((review) => (
                           <div key={review._id} className="p-4 rounded-xl bg-white border border-neutral-100">
                             <div className="flex items-center gap-3 mb-3">
-                              <div className="w-10 h-10 rounded-full bg-accent-500/10 flex items-center justify-center">
-                                <span className="text-accent-500 font-semibold text-sm">
-                                  {review.user?.name?.[0] || 'U'}
-                                </span>
+                              <div className="w-10 h-10 rounded-full bg-neutral-200 flex items-center justify-center">
+                                <User className="w-5 h-5 text-neutral-400" />
                               </div>
                               <div>
                                 <p className="font-medium text-primary-900 text-sm">{review.user?.name}</p>
@@ -348,11 +346,9 @@ export default function PropertyDetail() {
               <div className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-sm">
                 <h3 className="text-lg font-heading font-semibold text-primary-900 mb-4">Listed By</h3>
                 <div className="flex items-center gap-4">
-                  <img
-                    src={property.agent.avatar || `https://ui-avatars.com/api/?name=${property.agent.name}&background=c9a55c&color=fff`}
-                    alt={property.agent.name}
-                    className="w-14 h-14 rounded-full object-cover ring-2 ring-accent-500/20"
-                  />
+                  <div className="w-14 h-14 rounded-full bg-neutral-200 ring-2 ring-accent-500/20 flex items-center justify-center">
+                    <User className="w-7 h-7 text-neutral-400" />
+                  </div>
                   <div className="flex-1">
                     <p className="font-heading font-semibold text-primary-900">{property.agent.name}</p>
                     <p className="text-sm text-neutral-500">{property.agent.bio?.slice(0, 80) || 'Real Estate Agent'}</p>

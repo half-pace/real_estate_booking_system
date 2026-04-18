@@ -16,29 +16,29 @@ const seedData = async (shouldExit = false) => {
 
     // Create users
     const agent = await User.create({
-      name: 'James Anderson',
+      name: 'Chandan',
       email: 'agent@reales.com',
       password: 'password123',
       role: 'agent',
       phone: '+1 (555) 234-5678',
       bio: 'Luxury real estate specialist with 15 years of experience in premium properties.',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
+      avatar: '',
       verified: true
     });
 
     const agent2 = await User.create({
-      name: 'Sarah Mitchell',
+      name: 'Bhaskar',
       email: 'sarah@reales.com',
       password: 'password123',
       role: 'agent',
       phone: '+1 (555) 345-6789',
       bio: 'Award-winning real estate agent specializing in modern urban properties.',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face',
+      avatar: '',
       verified: true
     });
 
     await User.create({
-      name: 'Test User',
+      name: 'Ujiraj',
       email: 'user@reales.com',
       password: 'password123',
       role: 'user',
@@ -47,7 +47,7 @@ const seedData = async (shouldExit = false) => {
     });
 
     await User.create({
-      name: 'Admin',
+      name: 'Sarnajit',
       email: 'admin@reales.com',
       password: 'password123',
       role: 'admin',

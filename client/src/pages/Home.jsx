@@ -56,6 +56,76 @@ const TESTIMONIALS = [
     avatar: '',
     rating: 5,
   },
+  {
+    name: 'Manosh',
+    role: 'Property Seller',
+    text: 'Listing my property on CIT-ES was the best decision. I had guaranteed buyers lined up in less than a week.',
+    avatar: '',
+    rating: 5,
+  },
+  {
+    name: 'Anshu',
+    role: 'Tenant',
+    text: 'The easiest renting experience I have ever had. The process is completely transparent and the support team is stellar.',
+    avatar: '',
+    rating: 5,
+  },
+  {
+    name: 'Kristo',
+    role: 'Real Estate Developer',
+    text: 'CIT-ES has completely transformed how we market our developments. It is the premier platform for luxury real estate.',
+    avatar: '',
+    rating: 4,
+  },
+  {
+    name: 'Rinesh',
+    role: 'Homeowner',
+    text: 'Beautiful interface and incredibly secure platform. I felt very safe handling large transactions through their portal.',
+    avatar: '',
+    rating: 5,
+  },
+  {
+    name: 'Bijoy',
+    role: 'Investor',
+    text: 'Finding undervalued properties has never been easier. I check CIT-ES every morning for new listings.',
+    avatar: '',
+    rating: 5,
+  },
+  {
+    name: 'Sanjib',
+    role: 'Commercial Renter',
+    text: 'Superb commercial options! Found the perfect office space for my startup in downtown.',
+    avatar: '',
+    rating: 4,
+  },
+  {
+    name: 'Anjalu',
+    role: 'Homeowner',
+    text: 'We bought our retirement home through CIT-ES and the process was incredibly smooth and straightforward.',
+    avatar: '',
+    rating: 5,
+  },
+  {
+    name: 'Swdwmsa',
+    role: 'First-time Buyer',
+    text: 'The verified agents on CIT-ES are incredibly professional and never pushy. Truly a first-class service.',
+    avatar: '',
+    rating: 5,
+  },
+  {
+    name: 'Subham',
+    role: 'Tenant',
+    text: 'Loved the flexibility of the booking options. Everything from a month-to-month lease to long term agreements are handled dynamically.',
+    avatar: '',
+    rating: 5,
+  },
+  {
+    name: 'Jahnab',
+    role: 'Investor',
+    text: 'A truly Awwwards-worthy platform. It not only looks stunning but functions flawlessly for heavy investors.',
+    avatar: '',
+    rating: 5,
+  }
 ];
 
 export default function HomePage() {

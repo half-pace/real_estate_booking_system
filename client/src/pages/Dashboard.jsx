@@ -126,8 +126,8 @@ export default function Dashboard() {
             <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 sticky top-24">
               {/* User info */}
               <div className="text-center mb-6 pb-6 border-b border-neutral-100">
-                <div className="w-16 h-16 rounded-full bg-accent-500 flex items-center justify-center mx-auto mb-3">
-                  <span className="text-white text-2xl font-bold">{user?.name?.[0]?.toUpperCase()}</span>
+                <div className="w-16 h-16 rounded-full bg-neutral-200 flex items-center justify-center mx-auto mb-3">
+                  <User className="w-8 h-8 text-neutral-400" />
                 </div>
                 <h3 className="font-heading font-semibold text-primary-900">{user?.name}</h3>
                 <p className="text-sm text-neutral-500 capitalize">{user?.role}</p>

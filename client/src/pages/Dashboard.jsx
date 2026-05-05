@@ -12,6 +12,7 @@ import useAuthStore from '@/store/authStore';
 import { bookingsAPI, propertiesAPI, usersAPI } from '@/services/api';
 import { formatPrice, formatDate } from '@/utils/helpers';
 import toast from 'react-hot-toast';
+import AddPropertyModal from '@/components/properties/AddPropertyModal';
 
 const SIDEBAR_ITEMS = [
   { icon: LayoutDashboard, label: 'Overview', id: 'overview' },
@@ -22,6 +23,7 @@ const SIDEBAR_ITEMS = [
 
 const AGENT_ITEMS = [
   { icon: Building2, label: 'My Properties', id: 'properties' },
+  { icon: Bell, label: 'Received Bookings', id: 'agent-bookings' },
   { icon: TrendingUp, label: 'Analytics', id: 'analytics' },
 ];
 
@@ -37,21 +39,33 @@ export default function Dashboard() {
     phone: user?.phone || '',
     bio: user?.bio || '',
   });
+  const [isAddPropertyModalOpen, setIsAddPropertyModalOpen] = useState(false);
 
   const contentRef = useRef(null);
 
   const isAgent = user?.role === 'agent' || user?.role === 'admin';
 
+  const [agentBookings, setAgentBookings] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [bookRes] = await Promise.allSettled([
+        const [bookRes, propRes, agentBookRes] = await Promise.allSettled([
           bookingsAPI.getAll(),
           isAgent ? propertiesAPI.getMyProperties() : Promise.resolve({ data: { properties: [] } }),
+          isAgent && user?.role !== 'admin' ? bookingsAPI.getAgentBookings() : Promise.resolve({ data: { bookings: [] } })
         ]);
 
         if (bookRes.status === 'fulfilled') setBookings(bookRes.value.data.bookings || []);
+        if (propRes.status === 'fulfilled') setProperties(propRes.value.data.properties || []);
+        
+        if (user?.role === 'admin') {
+          // Admins see all bookings in their main tab, so we can duplicate it for agentBookings if needed
+          setAgentBookings(bookRes.status === 'fulfilled' ? bookRes.value.data.bookings || [] : []);
+        } else if (agentBookRes.status === 'fulfilled') {
+          setAgentBookings(agentBookRes.value.data.bookings || []);
+        }
       } catch (err) {
         console.error(err);
       } finally {
@@ -59,7 +73,7 @@ export default function Dashboard() {
       }
     };
     fetchData();
-  }, [isAgent]);
+  }, [isAgent, user]);
 
   useEffect(() => {
     if (isAgent) {
@@ -101,6 +115,32 @@ export default function Dashboard() {
       toast.success('Booking cancelled');
     } catch (err) {
       toast.error('Failed to cancel booking');
+    }
+  };
+
+  const handleDeleteBooking = async (bookingId, isAgentView = false) => {
+    if (!window.confirm('Are you sure you want to completely delete this booking?')) return;
+    try {
+      await bookingsAPI.delete(bookingId);
+      if (isAgentView) {
+        setAgentBookings(prev => prev.filter(b => b._id !== bookingId));
+      }
+      setBookings(prev => prev.filter(b => b._id !== bookingId));
+      toast.success('Booking deleted');
+    } catch (err) {
+      toast.error('Failed to delete booking');
+    }
+  };
+
+  const handleUpdateStatus = async (bookingId, status) => {
+    try {
+      await bookingsAPI.updateStatus(bookingId, status);
+      setAgentBookings(prev => prev.map(b => b._id === bookingId ? { ...b, status } : b));
+      setBookings(prev => prev.map(b => b._id === bookingId ? { ...b, status } : b));
+      toast.success(`Booking ${status}`);
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Failed to update status';
+      toast.error(msg);
     }
   };
 
@@ -256,16 +296,26 @@ export default function Dashboard() {
                             <span className="text-lg font-heading font-bold text-primary-900">{formatPrice(booking.totalPrice)}</span>
                           </div>
                         </div>
-                        {booking.status === 'pending' && (
+                        <div className="flex flex-col gap-2">
+                          {booking.status === 'pending' && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleCancelBooking(booking._id)}
+                              className="rounded-lg text-error border-error hover:bg-error hover:text-white"
+                            >
+                              Cancel
+                            </Button>
+                          )}
                           <Button
-                            variant="destructive"
+                            variant="ghost"
                             size="sm"
-                            onClick={() => handleCancelBooking(booking._id)}
-                            className="rounded-lg"
+                            onClick={() => handleDeleteBooking(booking._id, false)}
+                            className="rounded-lg text-neutral-500 hover:text-error hover:bg-red-50"
                           >
-                            Cancel
+                            <Trash2 className="w-4 h-4 mr-2" /> Delete
                           </Button>
-                        )}
+                        </div>
                       </div>
                     ))}
                     {bookings.length === 0 && (
@@ -274,6 +324,79 @@ export default function Dashboard() {
                         <h3 className="font-heading font-semibold text-primary-900 mb-2">No Bookings Yet</h3>
                         <p className="text-neutral-500 text-sm mb-4">Start exploring properties and make your first booking.</p>
                         <Link to="/properties"><Button className="rounded-xl">Browse Properties</Button></Link>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Agent Bookings (Received) */}
+            {activeTab === 'agent-bookings' && isAgent && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-heading font-bold text-primary-900">
+                  {user?.role === 'admin' ? 'All System Bookings' : 'Received Bookings'}
+                </h2>
+                <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm overflow-hidden">
+                  <div className="divide-y divide-neutral-100">
+                    {agentBookings.map((booking) => (
+                      <div key={booking._id} className="p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                        <img
+                          src={booking.property?.mainImage || 'https://via.placeholder.com/100'}
+                          alt={booking.property?.title}
+                          className="w-24 h-20 rounded-xl object-cover flex-shrink-0"
+                        />
+                        <div className="flex-1">
+                          <Link
+                            to={`/properties/${booking.property?._id}`}
+                            className="font-heading font-semibold text-primary-900 hover:text-accent-500 transition-colors"
+                          >
+                            {booking.property?.title || 'Property'}
+                          </Link>
+                          <p className="text-sm text-neutral-500 mt-1">
+                            Booked by: {booking.user?.name || 'Unknown'} · {formatDate(booking.checkIn)} — {formatDate(booking.checkOut)}
+                          </p>
+                          <div className="flex items-center gap-3 mt-2">
+                            <Badge variant={statusColors[booking.status]}>{booking.status}</Badge>
+                            <span className="text-sm font-semibold text-primary-900">{formatPrice(booking.totalPrice)}</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          {booking.status === 'pending' && (
+                            <div className="flex gap-2">
+                              <Button
+                                size="sm"
+                                onClick={() => handleUpdateStatus(booking._id, 'confirmed')}
+                                className="rounded-lg bg-green-500 hover:bg-green-600"
+                              >
+                                Accept
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleUpdateStatus(booking._id, 'rejected')}
+                                className="rounded-lg text-error border-error hover:bg-red-50"
+                              >
+                                Reject
+                              </Button>
+                            </div>
+                          )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteBooking(booking._id, true)}
+                            className="rounded-lg text-neutral-500 hover:text-error hover:bg-red-50 w-full"
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" /> Delete
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                    {agentBookings.length === 0 && (
+                      <div className="p-12 text-center">
+                        <Bell className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
+                        <h3 className="font-heading font-semibold text-primary-900 mb-2">No Received Bookings</h3>
+                        <p className="text-neutral-500 text-sm">You haven't received any bookings yet.</p>
                       </div>
                     )}
                   </div>
@@ -349,7 +472,7 @@ export default function Dashboard() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-heading font-bold text-primary-900">My Properties</h2>
-                  <Button className="rounded-xl">
+                  <Button className="rounded-xl" onClick={() => setIsAddPropertyModalOpen(true)}>
                     <Plus className="w-4 h-4 mr-2" /> Add Property
                   </Button>
                 </div>
@@ -413,6 +536,11 @@ export default function Dashboard() {
           </main>
         </div>
       </div>
+      <AddPropertyModal 
+        isOpen={isAddPropertyModalOpen} 
+        onClose={() => setIsAddPropertyModalOpen(false)} 
+        onSuccess={(newProperty) => setProperties(prev => [newProperty, ...prev])} 
+      />
     </div>
   );
 }

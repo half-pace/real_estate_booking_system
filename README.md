@@ -11,8 +11,9 @@ A stunning, production-ready real estate booking platform built with the MERN st
 - **Full Authentication** — JWT-based auth with role-based access (User, Agent, Admin)
 - **Property Management** — Browse, search, filter, and sort 12+ luxury properties
 - **Booking System** — Date selection, guest count, real-time pricing, and booking confirmation
-- **User Dashboard** — Bookings management, favorites, profile settings
-- **Agent Dashboard** — Property management, analytics, booking requests
+- **User Dashboard** — Manage personal bookings (book, cancel, delete), favorites, profile settings
+- **Agent Dashboard** — Manage properties (add, view), full incoming booking control (accept, reject, delete), agent analytics
+- **Admin Oversight** — Global system oversight, manage all properties and all bookings across the platform
 - **Responsive Design** — Mobile-first approach, works on all devices
 
 ## 🛠 Tech Stack
@@ -32,7 +33,7 @@ A stunning, production-ready real estate booking platform built with the MERN st
 ### Prerequisites
 
 - Node.js 18+ 
-- MongoDB Atlas account (free tier works)
+- Local MySQL instance (running on port 3306)
 
 ### 1. Clone & Install
 
@@ -97,7 +98,7 @@ Visit **http://localhost:5173** to see the application.
 │   │   ├── config/           # Database configuration
 │   │   ├── controllers/      # Route handlers
 │   │   ├── middleware/       # Auth middleware
-│   │   ├── models/           # Mongoose models
+│   │   ├── models/           # Sequelize (SQL) models
 │   │   ├── routes/           # API routes
 │   │   ├── utils/            # Seed data
 │   │   └── server.js         # Entry point
@@ -120,8 +121,12 @@ Visit **http://localhost:5173** to see the application.
 - `POST /api/auth/login` — Login user
 - `GET /api/properties` — List properties (with filters)
 - `GET /api/properties/:id` — Property details
+- `POST /api/properties` — Add a new property (Agent/Admin)
 - `POST /api/bookings` — Create booking (protected)
 - `GET /api/bookings` — User's bookings (protected)
+- `GET /api/bookings/agent/me` — Agent's incoming bookings (protected)
+- `PUT /api/bookings/:id/status` — Accept/Reject a booking (Agent/Admin)
+- `DELETE /api/bookings/:id` — Delete a booking (User/Agent/Admin)
 - `PUT /api/users/profile` — Update profile (protected)
 
 ## 📝 License

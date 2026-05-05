@@ -189,10 +189,12 @@ export const updateBooking = async (req, res) => {
 };
 
 // @desc    Cancel booking
-// @route   DELETE /api/bookings/:id
+// @route   PUT /api/bookings/:id/cancel
 export const cancelBooking = async (req, res) => {
   try {
-    const booking = await Booking.findByPk(req.params.id);
+    const booking = await Booking.findByPk(req.params.id, {
+      include: [{ model: Property, as: 'property' }]
+    });
 
     if (!booking) {
       return res.status(404).json({ success: false, message: 'Booking not found' });
@@ -202,8 +204,84 @@ export const cancelBooking = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Not authorized' });
     }
 
+    if (booking.status === 'confirmed' && booking.property) {
+      await booking.property.update({ status: 'available' });
+    }
+
     await booking.update({ status: 'cancelled' });
     res.json({ success: true, message: 'Booking cancelled' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Update booking status (Agent/Admin)
+// @route   PUT /api/bookings/:id/status
+export const updateBookingStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const booking = await Booking.findByPk(req.params.id, {
+      include: [{ model: Property, as: 'property' }]
+    });
+
+    if (!booking) {
+      return res.status(404).json({ success: false, message: 'Booking not found' });
+    }
+
+    const property = booking.property;
+    if (!property) {
+      return res.status(404).json({ success: false, message: 'Associated property not found' });
+    }
+
+    // Agent can only manage bookings for their properties
+    if (property.agentId !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Not authorized to manage this booking' });
+    }
+
+    if (status === 'confirmed') {
+      if (property.status !== 'available') {
+        return res.status(400).json({ success: false, message: 'Property is no longer available' });
+      }
+      await property.update({ status: 'booked' });
+    } else if (status === 'cancelled' || status === 'rejected') {
+      if (booking.status === 'confirmed') {
+        await property.update({ status: 'available' });
+      }
+    }
+
+    await booking.update({ status });
+    res.json({ success: true, booking });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Delete a booking entirely
+// @route   DELETE /api/bookings/:id
+export const deleteBooking = async (req, res) => {
+  try {
+    const booking = await Booking.findByPk(req.params.id, {
+      include: [{ model: Property, as: 'property' }]
+    });
+
+    if (!booking) {
+      return res.status(404).json({ success: false, message: 'Booking not found' });
+    }
+
+    const isOwner = booking.userId === req.user.id;
+    const isPropertyAgent = booking.property && booking.property.agentId === req.user.id;
+    const isAdmin = req.user.role === 'admin';
+
+    if (!isOwner && !isPropertyAgent && !isAdmin) {
+      return res.status(403).json({ success: false, message: 'Not authorized to delete this booking' });
+    }
+
+    if (booking.status === 'confirmed' && booking.property) {
+      await booking.property.update({ status: 'available' });
+    }
+
+    await booking.destroy();
+    res.json({ success: true, message: 'Booking deleted successfully' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -232,6 +310,53 @@ export const getPropertyBookings = async (req, res) => {
     });
 
     res.json({ success: true, bookings });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Get all bookings for all properties owned by an agent
+// @route   GET /api/bookings/agent/me
+export const getAgentBookings = async (req, res) => {
+  try {
+    const properties = await Property.findAll({
+      where: { agentId: req.user.id },
+      attributes: ['id']
+    });
+
+    const propertyIds = properties.map(p => p.id);
+
+    const bookings = await Booking.findAll({
+      where: { propertyId: { [Op.in]: propertyIds } },
+      include: [
+        {
+          model: Property,
+          as: 'property',
+          attributes: ['id', 'title', 'mainImage', 'price', 'locationCity', 'locationState', 'locationAddress'],
+        },
+        { model: User, as: 'user', attributes: ['id', 'name', 'email', 'avatar', 'phone'] },
+      ],
+      order: [['createdAt', 'DESC']],
+    });
+
+    // Transform property data
+    const transformed = bookings.map(b => {
+      const json = b.toJSON();
+      if (json.property) {
+        json.property.location = {
+          city: json.property.locationCity,
+          state: json.property.locationState,
+          address: json.property.locationAddress,
+        };
+        json.property.price = parseFloat(json.property.price);
+        delete json.property.locationCity;
+        delete json.property.locationState;
+        delete json.property.locationAddress;
+      }
+      return json;
+    });
+
+    res.json({ success: true, bookings: transformed });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

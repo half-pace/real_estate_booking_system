@@ -59,10 +59,13 @@ export const propertiesAPI = {
 // Bookings API
 export const bookingsAPI = {
   getAll: () => api.get('/bookings'),
+  getAgentBookings: () => api.get('/bookings/agent/me'),
   getOne: (id) => api.get(`/bookings/${id}`),
   create: (data) => api.post('/bookings', data),
   update: (id, data) => api.put(`/bookings/${id}`, data),
-  cancel: (id) => api.delete(`/bookings/${id}`),
+  updateStatus: (id, status) => api.put(`/bookings/${id}/status`, { status }),
+  cancel: (id) => api.put(`/bookings/${id}/cancel`),
+  delete: (id) => api.delete(`/bookings/${id}`),
   getPropertyBookings: (id) => api.get(`/bookings/property/${id}`),
 };
 
